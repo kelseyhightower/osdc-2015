@@ -1,0 +1,76 @@
+{
+  "kind": "ReplicationController",
+  "apiVersion": "v1beta3",
+  "metadata": {
+    "name": "pgview-stable-v2",
+    "labels": {
+      "app": "pgview",
+      "environment": "production",
+      "name": "pgview-stable-v2",
+      "track": "stable"
+    }
+  },
+  "spec": {
+    "replicas": 3,
+    "selector": {
+      "app": "pgview",
+      "environment": "production",
+      "name": "pgview-stable-v2",
+      "track": "stable"
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "pgview",
+          "environment": "production",
+          "name": "pgview-stable-v2",
+          "track": "stable"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "pgview",
+            "image": "192.168.0.1:5000/pgview:2.0.0",
+            "ports": [
+              {
+                "containerPort": 80,
+                "protocol": "TCP"
+              }
+            ],
+            "resources": {
+              "limits": {
+                "cpu": "100m",
+                "memory": "10000000"
+              }
+            },
+            "terminationMessagePath": "/dev/termination-log",
+            "imagePullPolicy": "IfNotPresent",
+            "capabilities": {}
+          },
+          {
+            "name": "memcached",
+            "image": "192.168.0.1:5000/memcached",
+            "ports": [
+              {
+                "containerPort": 11211,
+                "protocol": "TCP"
+              }
+            ],
+            "resources": {
+              "limits": {
+                "cpu": "100m",
+                "memory": "10000000"
+              }
+            },
+            "terminationMessagePath": "/dev/termination-log",
+            "imagePullPolicy": "IfNotPresent",
+            "capabilities": {}
+          }
+        ],
+        "restartPolicy": "Always",
+        "dnsPolicy": "ClusterFirst"
+      }
+    }
+  }
+}

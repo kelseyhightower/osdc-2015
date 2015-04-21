@@ -1,0 +1,19 @@
+[Unit]
+Description=Docker Application Container Engine
+Documentation=http://docs.docker.io
+
+[Service]
+EnvironmentFile=/run/flannel/subnet.env
+ExecStartPre=/bin/mount --make-rprivate /
+ExecStart=/opt/bin/docker \
+  --daemon \
+  --storage-driver=overlay \
+  --host=fd:// \
+  --insecure-registry=192.168.0.1:5000 \
+  --bip=${FLANNEL_SUBNET} \
+  --mtu=${FLANNEL_MTU} \
+  --ip-masq=false
+
+[X-Fleet]
+Global=true
+MachineMetadata=role=kubernetes

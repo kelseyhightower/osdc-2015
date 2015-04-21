@@ -1,0 +1,51 @@
+{
+  "kind": "Pod",
+  "apiVersion": "v1beta3",
+  "metadata": {
+    "name": "postgres",
+    "labels": {
+      "environment": "production",
+      "name": "postgres"
+    }
+  },
+  "spec": {
+    "volumes": [
+      {
+        "name": "pgdata",
+        "hostPath": {
+          "path": "/var/lib/postgresql/data"
+        }
+      }
+    ],
+    "containers": [
+      {
+        "name": "postgres",
+        "image": "192.168.0.1:5000/postgres",
+        "ports": [
+          {
+            "containerPort": 5432,
+            "protocol": "TCP"
+          }
+        ],
+        "env": [
+          {
+            "name": "POSTGRES_PASSWORD",
+            "value": "coreos"
+          }
+        ],
+        "resources": {},
+        "volumeMounts": [
+          {
+            "name": "pgdata",
+            "mountPath": "/var/lib/postgresql/data"
+          }
+        ],
+        "terminationMessagePath": "/dev/termination-log",
+        "imagePullPolicy": "IfNotPresent",
+        "capabilities": {}
+      }
+    ],
+    "restartPolicy": "Always",
+    "dnsPolicy": "ClusterFirst"
+  }
+}

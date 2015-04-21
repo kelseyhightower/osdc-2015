@@ -1,0 +1,76 @@
+#cloud-config
+
+---
+coreos:
+  units:
+    - name: fleet.socket
+      command: start
+      content: |
+        [Socket]
+        ListenStream=/var/run/fleet.sock
+        ListenStream=8000
+        Service=fleet.service
+
+        [Install]
+        WantedBy=sockets.target
+    - name: fleet.service
+      command: start
+      content: |
+        [Unit]
+        Description=A Distributed init System
+        After=download.service
+        Requires=download.service
+
+        [Service]
+        Environment=FLEET_METADATA=role=kubernetes
+        Environment=FLEET_ETCD_SERVERS=http://192.168.12.10:2379
+        ExecStart=/opt/bin/fleetd
+        Restart=always
+        RestartSec=10s
+    - name: setup-network-environment.service
+      command: start
+      content: |
+        [Unit]
+        Description=Setup Network Environment
+        Documentation=https://github.com/kelseyhightower/setup-network-environment
+        Requires=network-online.target
+        After=network-online.target
+        Requires=download.service
+        After=download.service
+
+        [Service]
+        ExecStart=/opt/bin/setup-network-environment
+        RemainAfterExit=yes
+        Type=oneshot
+    - name: download.service
+      command: start
+      content: |
+        [Unit]
+        Description=download extras
+
+        [Service]
+        ExecStart=/opt/bin/downloads.sh
+        RemainAfterExit=yes
+        Type=oneshot
+  update:
+    group: alpha
+    reboot-strategy: off
+write_files:
+  - path: /opt/bin/downloads.sh
+    permissions: 0755
+    owner: root
+    content: |
+      #!/bin/bash
+      mkdir -p /opt/bin
+
+      clients="etcdctl fleetctl kubectl"
+      core="docker etcd flanneld fleetd setup-network-environment"
+      kube="kube-apiserver kube-controller-manager kube-register kube-scheduler kubelet kube-proxy"
+      binaries="${core} ${clients} ${kube}"
+
+      for b in ${binaries}; do
+        /usr/bin/wget -N -P /opt/bin http://192.168.0.1/${b}
+        /usr/bin/chmod +x /opt/bin/${b}
+      done
+ssh_authorized_keys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHo+5nVpxDhnWBPhEuQ7D7ZYELvA5+fPEWfHmMUwBdW069FSfX1LtbVAUKW7NGMfCxTijQMfvmFt7i+o28uqrVGN+xlDdkKTarPYO/Ux6Rukw0D5RZLVDVdRIOV8Si26pkFp4ezs1NFnCFsPTXD8U4cQ1lok//x248oKGsB4ZWuRNf4PCaIdXDveXdQRbaV5SDo9JEt9VkmfSraH5JENguP51RhFJYzWQAB1QbRZrHYUfZbE+pb/XDTdSPidfRCvss9fDrrhviZjv1Gr8C9jbmSGRB8pKwGC/GWV/mj8nYEY1K3/0c/N9NNIPtmvNkQjq7eGsSUf0cM8ZbwWugr8cB kelseyhightower

@@ -1,0 +1,5 @@
+{
+    "method": "PGView.Version",
+    "params":[true],
+    "id": 0
+}

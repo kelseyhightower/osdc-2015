@@ -1,0 +1,21 @@
+{
+  "kind": "Pod",
+  "apiVersion": "v1beta3",
+  "metadata": {
+    "name": "awesome-app",
+    "labels": {
+      "environment": "production",
+      "name": "awesome-app"
+    }
+  },
+  "spec": {
+    "volumes": null,
+    "containers": [{
+      "name": "awesome-app",
+      "image": "quay.io/kelseyhightower/awesome-app",
+      "ports": [{"containerPort": 80, "protocol": "TCP"}],
+      "imagePullPolicy": "IfNotPresent"
+    }],
+    "restartPolicy": "Always",
+  }
+}

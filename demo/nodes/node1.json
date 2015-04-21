@@ -1,0 +1,15 @@
+{
+  "kind": "Node",
+  "apiVersion": "v1beta3",
+  "metadata": {
+    "name": "192.168.12.101",
+    "labels": {
+      "environment": "production",
+      "name": "node1",
+      "role": "database"
+    }
+  },
+  "spec": {
+    "externalID": "192.168.12.101"
+  }
+}

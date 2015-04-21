@@ -1,0 +1,21 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1beta3",
+  "metadata": {
+    "name": "postgres"
+  },
+  "spec": {
+    "ports": [
+      {
+        "protocol": "TCP",
+        "port": 5432,
+        "targetPort": 5432
+      }
+    ],
+    "selector": {
+      "environment": "production",
+      "name": "postgres"
+    },
+    "sessionAffinity": "None"
+  }
+}

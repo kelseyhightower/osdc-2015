@@ -1,0 +1,192 @@
+Building Distributed Systems with CoreOS
+Open Source Data Center Conference 2015
+
+Kelsey Hightower
+CoreOS
+kelsey.hightower@coreos.com
+@kelseyhightower
+
+* Goals
+
+- Provide an overview of distributed systems infrastructure 
+- Live demonstration of CoreOS and Kubernetes
+- Demystify and spark your imagination
+
+* How would you design your infrastructure if you couldn't login?
+
+* Distributed systems
+
+A collection of machines connected through a network acting as a single machine.
+
+- Scalability
+- Highly Available
+- Fault Tolerance
+- Consistent
+
+* Distributed systems pros and cons
+
+Pros:
+
+- Proven solutions for fault tolerance
+- Your best shot at 99.999% uptime
+
+Cons:
+
+- Increased complexity
+- Steep learning curve
+- Software must be designed to handle failures
+
+* Building Blocks
+
+- Container
+- Operating System
+- Network
+- Consensus
+- Scheduler
+
+* Container
+
+Not golden images.
+
+- Unix processes not lightweight Virtual Machines
+- application + dependencies = image
+- Runtime environment (cgroups, namespaces)
+
+* CoreOS Linux
+
+.link https://coreos.com/using-coreos coreos.com
+
+Container optimized Linux distribution.
+
+- Linux, systemd, container runtime
+- No package manager
+- Automatic updates
+- Read-only file system
+- Rolling releases
+
+* etcd
+
+.link https://github.com/coreos/etcd github.com/coreos/etcd
+
+Distributed key/value store and lock service.
+
+- Raft protocol
+- Strong consistency guarantees (sequential consistency)
+
+* flannel
+
+.link https://github.com/coreos/flannel github.com/coreos/flannel
+
+etcd backed network fabric for containers.
+
+- Cross host networking
+- Optional overlay networking
+- Subnet allocation
+
+Multiple backends
+
+- udp
+- alloc
+- vxlan
+- host-gw
+
+* fleet
+
+.link https://github.com/coreos/fleet github.com/coreos/fleet
+
+Highly available distributed init system based on systemd.
+
+- Simple job scheduler
+- Machine database
+
+* fleet demo
+
+* Kubernetes
+
+.link http://kubernetes.io kubernetes.io
+
+Container management, scheduling, and service discovery.
+
+- API driven application management
+- Agents monitor endpoints for state changes (real-time)
+- Controllers enforce desired state
+- Labels identify resources (nodes, applications, services)
+
+* Kubernetes
+
+Resources and high level objects.
+
+- nodes
+- pods
+- replication controllers
+- services
+
+* Kubernetes
+
+Declarative syntax.
+
+.code manifests/pod.json
+
+* Kubernetes
+
+Cluster management components.
+
+- etcd
+- API server
+- Replication Controller
+- Scheduler
+- Proxy
+- Kubelet
+
+* Provisioning Kubernetes
+
+* Real world example
+
+* Cluster Details
+
+Bare metal environment.
+
+- iPXE with storage drives
+- Cross host communication between containers (flannel)
+
+* pgview
+
+Postgres database info as a service.
+
+Application requirements:
+
+- Horizontally scalable 
+- Dedicated Memcache instance per application (local caching)
+- Postgres database
+
+Operational Requirements:
+
+- Automated service discovery
+- Zero downtime application upgrades
+
+* pgview
+
+Request
+
+  curl http://api.pgview.com -d @rpc/sqlfeatures.json
+
+Response
+
+  {
+      "id": 0,
+      "result": {
+          "Features": [
+              "Embedded Ada",
+              "Embedded C",
+              "Embedded COBOL",
+              "Embedded Fortran",
+              "Embedded MUMPS",
+              "Embedded Pascal",
+              ...
+          ],
+          "Count": 672
+      },
+      "error": null
+  }
+
+* Kubernetes demo
