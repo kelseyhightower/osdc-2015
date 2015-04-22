@@ -21,7 +21,7 @@ fleetctl start units/docker.service
 ### Start Kubernetes Server Components
 
 ``` 
-fleetctl start units/etcd.service 
+fleetctl start units/kube-etcd.service 
 fleetctl start units/kube-apiserver.service 
 fleetctl start units/kube-controller-manager.service 
 fleetctl start units/kube-scheduler.service 
