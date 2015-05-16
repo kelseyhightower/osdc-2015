@@ -8,6 +8,10 @@ Wednesday, April 22nd, 2015
 
 This talk requires the [Go Present](https://godoc.org/golang.org/x/tools/present) tool to view locally, or just view the slides [online](http://go-talks.appspot.com/github.com/kelseyhightower/osdc-2015/slides/building-distributed-systems-with-coreos.slide).
 
+## Video
+
+Recorded video is available on [Youtube](https://www.youtube.com/watch?v=bU9Uh4ihgR4&feature=youtu.be)
+
 ## Abstract
 
 Building distributed systems is hard, but with the right components just about anyone can get started. At the heart of any distributed system is the underlying infrastructure, which often includes a collection of servers, a central configuration and lock service, and a scheduler to manage your workloads.
